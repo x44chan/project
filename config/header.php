@@ -18,10 +18,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/js.js"></script>
 		
-		<link rel="stylesheet" type="text/css" href="css/datatables.min.css"/> 
-		<script type="text/javascript" src="js/datatables.min.js"></script>		
-		<script type="text/javascript" src="js/highcharts.js"></script>
-		<script type="text/javascript" src="js/exporting.js"></script>		
+		<link rel="stylesheet" type="text/css" href="css/datatables.min.css"/> 		
 		<script type="text/javascript" src="js/nprogress.js"></script>
 	</head>
 	<body>

@@ -10,6 +10,7 @@
 		<div class="col-xs-12">
 			<div class="panel-group" id="accordion">
 				<?php
+					//post query
 					$posts = "SELECT a.account_id,a.post_id,a.post_title,a.post_body,a.post_date,b.fname,b.lname FROM projectx.post as a,testnew.login as b where a.account_id = b.account_id ORDER BY post_id DESC";
 					$posts = $conn->query($posts);
 					while ($post = $posts->fetch_object()) {
@@ -23,6 +24,28 @@
 			    			<blockquote style="font-size: 13px;">
 								<p><?php echo $post->post_body;?></p>
 								<footer style ="font-size: 13px;"><i><?php echo $post->fname . ' ' . $post->lname . " ( " . date("M j, Y h:i:s A",strtotime($post->post_date)) . " ) ";?></i></footer>
+								<br>
+								<div class ="form-inline">
+									<input type = "text" class="form-control input-sm" placeholder = "Write your comment" name = "comment" style="width: 50%;" autocomplete = "off"/>
+									<button type="submit" class="btn btn-sm btn-primary hidden-sm hidden-xs" onclick="commentx()"><span class = "icon-bubble"></span> Comment! </button>
+				        			<button type="submit" class="btn btn-sm btn-primary visible-sm visible-xs" onclick="commentx()"><span class = "icon-bubble"></span></button>
+				        			<input type="hidden" value="<?php echo $post->post_id;?>" name = "postid">
+				        		</div>
+								<h4 style="font-size: 13px; font-weight: bold;"><i> - Comments - </i></h4>
+								<blockquote style="font-size: 13px;" id="cmnt_tab">
+								<?php 
+									//Comments
+									$comment = "SELECT a.account_id,a.post_id,a.comment,a.comment_date,b.fname,b.lname FROM projectx.comment as a,testnew.login as b where a.post_id = '$post->post_id' and a.account_id = b.account_id ORDER BY comment_date DESC";
+									$comment = $conn->query($comment);
+									if($comment->num_rows > 0){
+										while ($comments = $comment->fetch_object()) {										
+								?>									
+										<p><?php echo $comments->comment;?></p>
+										<footer style ="font-size: 13px;"><i><?php echo $comments->fname . ' ' . $comments->lname . " ( " . date("M j, Y h:i:s A",strtotime($comments->comment_date)) . " ) ";?></i></footer>
+										<hr>	
+								<?php	} ?>
+								</blockquote>
+								<?php	}	?>
 							</blockquote>
 			        	</div>
 			      	</div>
