@@ -16,7 +16,7 @@
             </ul>
         	<ul class="nav navbar-nav navbar-right">
         		<li class="dropdown">
-            		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-user"></span> <?php echo $_SESSION['name']; ?> <b class="caret"></b></a>
+            		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-user"></span> <?php echo $_SESSION['nameproj']; ?> <b class="caret"></b></a>
             		<ul class="dropdown-menu" role="menu">            			
 						<!--<li><a role = "button" data-toggle="modal" data-target="#changepass"><span class="icon-eye"></span> Change Password </a></li>-->
                 		<li><a style = "color: red;" role = "button" href = "logout"><span class="icon-switch"></span> Log Out </a></li>					

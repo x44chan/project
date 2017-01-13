@@ -27,9 +27,9 @@
 								<br>
 								<div class ="form-inline">
 									<input type = "text" class="form-control input-sm" placeholder = "Write your comment" name = "comment" style="width: 50%;" autocomplete = "off"/>
-									<button type="submit" class="btn btn-sm btn-primary hidden-sm hidden-xs" onclick="commentx()"><span class = "icon-bubble"></span> Comment! </button>
-				        			<button type="submit" class="btn btn-sm btn-primary visible-sm visible-xs" onclick="commentx()"><span class = "icon-bubble"></span></button>
+									<button type="submit" class="btn btn-sm btn-primary" onclick="commentx()"><span class = "icon-bubble"></span> Comment! </button>
 				        			<input type="hidden" value="<?php echo $post->post_id;?>" name = "postid">
+				        			<input type="hidden" value="<?php echo $_SESSION['acc_idproj'];?>" name = "accid">				        			
 				        		</div>
 								<h4 style="font-size: 13px; font-weight: bold;"><i> - Comments - </i></h4>
 								<blockquote style="font-size: 13px;" id="cmnt_tab">

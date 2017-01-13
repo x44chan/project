@@ -2,6 +2,7 @@
     function commentx() {
         postid = $("input[name = 'postid']").val();
         comment = $("input[name = 'comment']").val();
+        accid = $("input[name = 'accid']").val();
         if(comment == "" || postid == ""){
             alert("Write your comment...");
         }else if(comment.length > 255){
@@ -19,7 +20,7 @@
                     document.getElementById("cmnt_tab").innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET","ajax/ajaxowner.php?comment="+comment+"&postid="+postid,true);
+            xmlhttp.open("GET","ajax/ajaxowner.php?comment="+comment+"&postid="+postid+"&accid="+accid,true);
             xmlhttp.send();
             $("input[name = 'comment']").val("");
         }

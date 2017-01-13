@@ -3,14 +3,13 @@
 	if(!isset($_GET['module'])){
 		echo '<script type = "text/javascript">window.location.replace("/project/");</script>';
 	}
-	session_start();
 ?>
 <?php
 	if(isset($_GET['comment']) && isset($_GET['postid'])){
 		if (!empty($_GET['comment']) && !empty($_GET['postid'])) {
-			$comment = mysql_real_escape_string($_GET['comment']);
-			$postid = mysql_real_escape_string($_GET['postid']);
-			$accid = $_SESSION['acc_idproj'];
+			$comment =  $_GET['comment'];
+			$postid = $_GET['postid'];
+			$accid = $_GET['accid'];
 
 			$stmt = $conn->prepare("INSERT INTO comment (comment, post_id, account_id) VALUES (?, ?, ?)");
 			$stmt->bind_param("sii", $comment, $postid, $accid);

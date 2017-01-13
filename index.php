@@ -64,8 +64,8 @@
 		if($result->num_rows > 0){
 			while($row = $result->fetch_assoc()){								
 				$_SESSION['acc_idproj'] = $row['account_id'];
-				$_SESSION['name'] = $row['fname'] . ' ' . $row['mname'] . ', ' . $row['lname'];
-      			$_SESSION['username'] = $row['uname'];
+				$_SESSION['nameproj'] = $row['fname'] . ' ' . $row['mname'] . ', ' . $row['lname'];
+      			$_SESSION['usernameproj'] = $row['uname'];
 				//$_SESSION['level']=$row['level'];
 			  	echo  '<div class="alert alert-success" align = "center"><strong>Logging in ~!</strong></div>';
 			  	echo '<script type="text/javascript">setTimeout(function() {window.location.href = "/project"},1000);; </script>';	
