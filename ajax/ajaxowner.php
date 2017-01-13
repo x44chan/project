@@ -31,3 +31,20 @@
 		}
 	}
 ?>
+
+<?php 
+		if(isset($_GET['refresh']) && $_GET['refresh'] == 1){
+			//Comments
+			$comment = "SELECT a.account_id,a.post_id,a.comment,a.comment_date,b.fname,b.lname FROM projectx.comment as a,testnew.login as b where a.account_id = b.account_id ORDER BY comment_date DESC";
+			$comment = $conn->query($comment);
+			if($comment->num_rows > 0){
+				while ($comments = $comment->fetch_object()) {										
+?>									
+					<p><?php echo $comments->comment;?></p>
+					<footer style ="font-size: 13px;"><i><?php echo $comments->fname . ' ' . $comments->lname . " ( " . date("M j, Y h:i:s A",strtotime($comments->comment_date)) . " ) ";?></i></footer>
+					<hr>	
+<?php
+				}
+			}
+		}
+?>

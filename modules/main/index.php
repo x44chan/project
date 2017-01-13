@@ -8,16 +8,45 @@
 	<br>
 	<div class="row">
 		<div class="col-xs-12">
+			<form action="" method="get">
+				<div class="form-inline">
+					<label>Select Project: </label>
+					<select class="form-control input-sm" name = "proj">
+		      			<option value="">- - - - - - - - - - - - - - - - - -</option>
+		      			<?php
+		      				$proj = "SELECT * FROM testnew.project where state = 1 and type = 'Project' and name NOT IN ('BIDDING','Project') ORDER BY name ASC";
+		      				$proj = $conn->query($proj);
+		      				if($proj->num_rows > 0){
+		      					while ($projs = $proj->fetch_object()) {
+		      						echo '<option value = "' . $projs->project_id . '"> ' . $projs->name . ' </option>';
+		      					}
+		      				}
+		      			?>
+		      		</select>
+					<button class="btn btn-sm btn-primary"><span class="icon-search"></span></button>
+					<a href="/project" class="btn btn-sm btn-danger"><span class="icon-spinner11"></span></a>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
 			<div class="panel-group" id="accordion">
 				<?php
 					//post query
-					$posts = "SELECT a.account_id,a.post_id,a.post_title,a.post_body,a.post_date,b.fname,b.lname FROM projectx.post as a,testnew.login as b where a.account_id = b.account_id ORDER BY post_id DESC";
+					if(isset($_GET['proj']) && $_GET['proj'] != ""){
+						$projid = mysqli_real_escape_string($conn, $_GET['proj']);
+						$projfil = " a.project_id = '$projid' and c.project_id = '$projid' ";
+					}else{
+						$projfil = " a.project_id = c.project_id ";
+					}
+					$posts = "SELECT a.account_id,a.post_id,a.post_title,a.post_body,a.post_date,b.fname,b.lname,c.name FROM projectx.post as a,testnew.login as b,testnew.project as c where a.account_id = b.account_id and $projfil ORDER BY a.post_id DESC";
 					$posts = $conn->query($posts);
 					while ($post = $posts->fetch_object()) {
 				?>
 		    	<div class="panel panel-success">
 		    		<div class="panel-heading">
-		        		<h6 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $post->post_id;?>"><?php echo $post->post_title;?> <b class = "caret"></b></a></h6>
+		        		<h6 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#<?php echo $post->post_id;?>"><?php echo $post->post_title . ' <i>( ' . $post->name . ' )</i> ';?> <b class = "caret"></b></a></h6>
 		    		</div>
 			    	<div id="<?php echo $post->post_id;?>" class="panel-collapse collapse">
 			    		<div class="panel-body" style="padding-left: 30px;">
@@ -70,6 +99,21 @@
 	    </div>
 	    <div class="modal-body" style="padding:20px 50px;">
 	      <form role="form" action = "" method = "post">
+	      	<div class="form-group">
+	      		<label>Project <font color = "red"> * </font> <?php if(isset($_SESSION['erproj']) && $_SESSION['erproj'] != ""){ echo '<font color = "red"><i>' . $_SESSION['erproj'] . '</i></font>'; unset($_SESSION['erproj']); } ?> </label>
+	      		<select class="form-control input-sm" name = "project">
+	      			<option value="">- - - - - - - - - - - - - - - - - -</option>
+	      			<?php
+	      				$proj = "SELECT * FROM testnew.project where state = 1 and type = 'Project' and name NOT IN ('BIDDING','Project') ORDER BY name ASC";
+	      				$proj = $conn->query($proj);
+	      				if($proj->num_rows > 0){
+	      					while ($projs = $proj->fetch_object()) {
+	      						echo '<option value = "' . $projs->project_id . '"> ' . $projs->name . ' </option>';
+	      					}
+	      				}
+	      			?>
+	      		</select>
+	      	</div>
 	        <div class="form-group">
 	        	<label>Title <font color = "red"> * </font> <?php if(isset($_SESSION['ertitle']) && $_SESSION['ertitle'] != ""){ echo '<font color = "red"><i>' . $_SESSION['ertitle'] . '</i></font>'; unset($_SESSION['ertitle']); } ?> </label>
 	        	<i><input autocomplete = "off" type = "text" name = "title" <?php if(isset($_SESSION['title']) && $_SESSION['title'] != ""){ echo ' value = "' . $_SESSION['title'] . '" '; unset($_SESSION['title']); } ?> class="form-control input-sm" placeholder = "Enter post title" required></i>
@@ -94,13 +138,17 @@
 			$_SESSION['ermsg'] = 'Enter message';
 			$err = 1;
 		}
+		if(empty($_POST['project'])){
+			$_SESSION['erproj'] = 'Select Project';
+			$err = 1;
+		}
 		if($err > 0){
 			echo "<script type='text/javascript'>alert('Check you details'); window.location.href = '/project';</script>";
 			$_SESSION['msg'] = $_POST['message'];
 			$_SESSION['title'] = $_POST['title'];
 		}else{
-			$stmt = $conn->prepare("INSERT INTO post (account_id, post_title, post_body) VALUES (?, ?, ?)");
-			$stmt->bind_param("iss", $_SESSION['acc_idproj'], $_POST['title'], $_POST['message']);
+			$stmt = $conn->prepare("INSERT INTO post (account_id, post_title, post_body, project_id) VALUES (?, ?, ?, ?)");
+			$stmt->bind_param("issi", $_SESSION['acc_idproj'], $_POST['title'], $_POST['message'], $_POST['project']);
 			if($stmt->execute()){
 				echo "<script type='text/javascript'>alert('Success'); window.location.href = '/project';</script>";
 			}else{
